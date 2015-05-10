@@ -2,8 +2,31 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-sm-5">
-			<table>
+		<div class="col-sm-6">
+			<h1>Stochastic Strategy</h1>
+
+			<table id="portfolio" class="table-1">
+				<tr>
+					<th>Equity Ratio</th>
+					<th>Number</th>
+					<th>Original Capital</th>
+					<th>Current MV</th>
+					<th>Current Cash</th>
+					<th>Yields</th>
+				</tr>
+				<tr>
+					<td>100%</td>
+					<td>6</td>
+					<td>100</td>
+					<td>200</td>
+					<td>0</td>
+					<td>100%</td>
+				</tr>
+			</table>
+
+			<br />
+
+			<table id="combine" class="table-1">
 				<tr>
 					<th></th>
 					<th>Stock ID</th>
@@ -16,41 +39,113 @@
 			</table>
 		</div>
 
-		<div class="col-sm-7">
+		<div class="col-sm-6">
+			<table id="title" class="table-2">
+				<tr>
+					<td id="id">600000</td>
+					<td id="price" rowspan="2">11.80</td>
+					<td>open:</td>
+					<td id="open">11.55</td>
+					<td id="date" colspan="2">2011-1-1 10:30:30</td>
+				</tr>
+				<tr>
+					<td id="name" rowspan="2">pufayinh</td>
+					<td id="">high:</td>
+					<td id="high">12.55</td>
+					<td id="">volume:</td>
+					<td id="volume">33333333</td>
+				</tr>
+				<tr>
+					<td id="rate">10.01%</td>
+					<td id="">low:</td>
+					<td id="low">10.55</td>
+					<td id="">amount:</td>
+					<td id="amount">333333333333</td>
+				</tr>
+			</table>
+
+
 			<img src="http://image.sinajs.cn/newchart/daily/n/sh601006.gif" alt="">
-			<img src="http://image.sinajs.cn/newchart/daily/n/sh601006.gif" alt="">
-			<img src="http://image.sinajs.cn/newchart/daily/n/sh601006.gif" alt="">
+
+<!-- 			<div id="index_stock_info">
+				<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="560"  height="535" id="main" align="middle" >
+					<param name="wmode" value="opaque">
+					<param name="allowScriptAccess" value="always" />
+					<param name="allowFullScreen" value="false" />
+					<param name="movie" value="http://flashhq.gw.com.cn/tab.swf?flashdzh_theme=black&flashdzh_aveLine=0&font=0&stk_list=分时,1,600000,1,11;K线,1,600000,2,0&resource_root=http://flashhq.gw.com.cn/" />
+					<param name="quality" value="high" />
+					<param name="scale" value="noscale"/>
+					<param name="salign" value="lt" />
+					<param name="bgcolor" value="#002436" /> 
+					<embed src="http://flashhq.gw.com.cn/tab.swf?flashdzh_theme=black&flashdzh_aveLine=0&font=0&stk_list=分时,1,600000,1,11;K线,1,600000,2,0&resource_root=http://flashhq.gw.com.cn/" quality="high" scale="noscale" salign="lt" bgcolor="#002436" width="560"  height="535" name="main" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="opaque"/>
+				</object> 
+			</div> -->
+
 		</div>
 	</div>
 </div>
 
 <script id="data" src="http://hq.sinajs.cn/list=<%= stock %>"></script>
 <script>
-var id = '<%= stock %>';
-id = id.split(',');
-var stock = [];
-for(var i=0; i<id.length; i++){
-	var temp = eval('hq_str_'+id[i]);
-	stock.push(temp.split(','));
-}
+$(document).ready(function(){
+	var id = '<%= stock %>';
+	id = id.split(',');
+	var stock = [];
+	for(var i=0; i<id.length; i++){
+		var temp = eval('hq_str_'+id[i]);
+		stock.push(temp.split(','));
+	}
 
-var datastring = '';
-for(var i=0; i<id.length; i++){
-	datastring = datastring +
-	'<tr>'+
-	'<td>'+(i+1)+'</td>'+
-	'<td>'+id[i].slice(2,8)+'</td>'+
-	'<td>'+stock[i][0]+'</td>'+
-	'<td>'+stock[i][3]+'</td>'+
-	'<td>'+((stock[i][3]-stock[i][2])/stock[i][2]*100).toFixed(2)+'%</td>'+
-	'<td>'+stock[i][8]+'</td>'+
-	'<td>'+stock[i][9]+'</td>'+
-	'</tr>';
-}
+	var datastring = '';
+	for(var i=0; i<id.length; i++){
+		datastring = datastring +
+		'<tr>'+
+		'<td>'+(i+1)+'</td>'+
+		'<td>'+id[i].slice(2,8)+'</td>'+
+		'<td>'+stock[i][0]+'</td>'+
+		'<td>'+stock[i][3]+'</td>'+
+		'<td>'+((stock[i][3]-stock[i][2])/stock[i][2]*100).toFixed(2)+'%</td>'+
+		'<td>'+stock[i][8]+'</td>'+
+		'<td>'+stock[i][9]+'</td>'+
+		'</tr>';
+	}
 
-$("table").append(datastring);
+	$("#combine").append(datastring);
 
 
+	$("#combine tr").on("click", function(){
+		var index = parseInt($(this).find("td:first-child").html())-1;
+		$("#id").html(id[index]);
+		$("#name").html(stock[index][0]);
+		$("#open").html(stock[index][1]);
+		$("#high").html(stock[index][4]);
+		$("#low").html(stock[index][5]);
+		$("#price").html(stock[index][3]);
+		$("#volume").html(stock[index][8]);
+		$("#amount").html(stock[index][9]);
+		$("#date").html(stock[index][30]+'&nbsp;&nbsp;'+stock[index][31]);
+		$("#rate").html(((stock[index][3]-stock[index][2])/stock[index][2]*100).toFixed(2)+"%");
+
+		priceColor(stock[index][1], stock[index][2], $("#open"));
+		priceColor(stock[index][3], stock[index][2], $("#price"));
+		priceColor(stock[index][3], stock[index][2], $("#rate"));
+		priceColor(stock[index][4], stock[index][2], $("#high"));
+		priceColor(stock[index][5], stock[index][2], $("#low"));
+	});
+
+	function priceColor(p, lp, ele){
+		if(p>lp){
+			ele.css("color", "red");
+		}else if(p<lp){
+			ele.css("color", "green");
+		}else{
+			ele.css("color", "grey");
+		}
+		return;
+	}
+
+
+});
 
 </script>
 

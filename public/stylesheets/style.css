@@ -50,28 +50,97 @@ nav>a:hover {
 	border-color: transparent;
 }
 
-table tr:first-child th:first-child{
+.table-1 tr:first-child th:first-child{
 		border-top-left-radius: 5px;
 }
 
-table tr:first-child th:last-child{
+.table-1 tr:first-child th:last-child{
 		border-top-right-radius: 5px;
 }
 
-table tr:first-child {
+.table-1 tr:first-child {
 	background: rgb(14,82,116);
 }
 
-tr {
+.table-1 {
+	width: 95%;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+.table-1 tr {
 	border-bottom: 1px solid rgba(14,82,116,1);
 }
 
-td, th {
+.table-1 td, .table-1 th {
 	padding: 10px 5px;
 	text-align: center;
 }
 
-tr:hover {
+.table-1 tr:hover {
 	background-color: rgba(46,213,227,0.8);
 	cursor: pointer;
+}
+
+h1 {
+	margin-top: 10px;
+	margin-bottom: 30px;
+}
+
+.table-2 {
+	margin: 10px center;
+	width: 95%;
+}
+
+.table-2 td {
+	padding: 5px;
+}
+
+#id {
+	font-size: 20px;
+	padding: 0;
+	vertical-align: bottom;
+	text-align: center;
+}
+
+#name {
+	font-size: 30px;
+	color: #ddb13d;
+	text-align: center;
+	padding: 5px;
+}
+
+#price {
+	font-size: 30px;
+	vertical-align: bottom;
+	text-align: center;
+}
+
+#rate {
+	padding: 0;
+	vertical-align: top;
+	text-align: center;
+}
+
+#volume {
+
+}
+
+#amount {
+
+}
+
+#date {
+	color: yellow;
+	text-align: center;
+}
+
+.table-2 tr:first-child td:nth-child(3) {
+	text-align: right;
+}
+.table-2 tr:nth-child(2) td:nth-child(2) {
+	text-align: right;
+}
+.table-2 tr:last-child td:nth-child(2){
+	text-align: right;
 }
