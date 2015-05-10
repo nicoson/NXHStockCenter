@@ -8,8 +8,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/strategy', function(req, res, next) {
-	stockget("strategyDatabase", "test", function(data, err){
+	stockget.getId("strategyDatabase", "test", function(data, err){
 		res.render('strategy', { stock: data });
+	});
+});
+
+router.post("/strategy", function(req, res){
+	var id = req.body.id;
+	stockget.getData(id, "updateDatabase", function(data, err){
+		res.send(data);
 	});
 });
 
