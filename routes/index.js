@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/strategy', function(req, res, next) {
-	stockget.getId("strategyDatabase", "test", function(data, err){
+	stockget.getId("strategyDatabase", "s1_test_currentHolding", function(data, err){
 		res.render('strategy', { stock: data });
 	});
 });

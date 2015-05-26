@@ -4,7 +4,7 @@ mysql.connect();
 function stockget(){}
 
 stockget.getId = function(database, table, callback){
-	mysql.query("select * from "+database+'.'+table, function(err,rows,fields){
+	mysql.query("select * from "+database+'.'+table+' where stockid != 000000', function(err,rows,fields){
 		if(err){
 			console.log("no data");
 			//mysql.end();
@@ -12,9 +12,9 @@ stockget.getId = function(database, table, callback){
 		}
 		var data = [];
 		for(var i=0; i<rows.length; i++){
-			if(rows[i].stocktype == 1){
+			if(rows[i].stockid[0] == '6'){
 				data.push('sh'+rows[i].stockid); 
-			}else if(rows[i].stocktype == 2){
+			}else if(rows[i].stockid[0] == '0' || rows[i].stockid[0] == '3'){
 				data.push('sz'+rows[i].stockid); 
 			}
 		}
