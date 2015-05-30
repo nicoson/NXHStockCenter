@@ -31,10 +31,10 @@
 					<th></th>
 					<th>Stock ID</th>
 					<th>Corp Name</th>
-					<th>Price</th>
-					<th>rate</th>
-					<th>Volume</th>
-					<th>Amount</th>
+					<th>Buy Date</th>
+					<th>Buy Price</th>
+					<th>Yields</th>
+					<th>CV</th>
 				</tr>
 			</table>
 		</div>
@@ -68,29 +68,21 @@
 			<!-- for ECharts -->
 			<div id="echarts" style="height:400px; width: 100%"></div>
 
-<!-- 			<div id="index_stock_info">
-				<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="560"  height="535" id="main" align="middle" >
-					<param name="wmode" value="opaque">
-					<param name="allowScriptAccess" value="always" />
-					<param name="allowFullScreen" value="false" />
-					<param name="movie" value="http://flashhq.gw.com.cn/tab.swf?flashdzh_theme=black&flashdzh_aveLine=0&font=0&stk_list=分时,1,600000,1,11;K线,1,600000,2,0&resource_root=http://flashhq.gw.com.cn/" />
-					<param name="quality" value="high" />
-					<param name="scale" value="noscale"/>
-					<param name="salign" value="lt" />
-					<param name="bgcolor" value="#002436" /> 
-					<embed src="http://flashhq.gw.com.cn/tab.swf?flashdzh_theme=black&flashdzh_aveLine=0&font=0&stk_list=分时,1,600000,1,11;K线,1,600000,2,0&resource_root=http://flashhq.gw.com.cn/" quality="high" scale="noscale" salign="lt" bgcolor="#002436" width="560"  height="535" name="main" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="opaque"/>
-				</object> 
-			</div> -->
-
 		</div>
 	</div>
 </div>
 
-<script id="data" src="http://hq.sinajs.cn/list=<%= stock %>"></script>
+<!-- <script id="data" src="http://hq.sinajs.cn/list=<%= stock %>"></script> -->
+<script id="data" src="http://hq.sinajs.cn/list=<%= stock[1] %>"></script>
 <script>
 $(document).ready(function(){
-	var id = '<%= stock %>';
+	var id = '<%= stock[1] %>';
+	var sdata = '<%= stock[0] %>';
+	var weight = '<%= stock[2] %>';
 	id = id.split(',');
+	sdata = sdata.split(',');
+	weight = weight.split(',');
+
 	var stock = [];
 	for(var i=0; i<id.length; i++){
 		var temp = eval('hq_str_'+id[i]);
@@ -98,21 +90,31 @@ $(document).ready(function(){
 	}
 
 	var datastring = '';
+	var totalCV = 0;
 	for(var i=0; i<id.length; i++){
+		var cv = (sdata[(i+1)*4+3]*stock[i][3]*weight[i]/sdata[(i+1)*4+2]).toFixed(2);
+		totalCV += parseFloat(cv);
 		datastring = datastring +
 		'<tr>'+
 		'<td>'+(i+1)+'</td>'+
 		'<td>'+id[i].slice(2,8)+'</td>'+
 		'<td>'+stock[i][0]+'</td>'+
-		'<td>'+stock[i][3]+'</td>'+
-		'<td>'+((stock[i][3]-stock[i][2])/stock[i][2]*100).toFixed(2)+'%</td>'+
-		'<td>'+stock[i][8]+'</td>'+
-		'<td>'+stock[i][9]+'</td>'+
+		'<td>'+sdata[(i+1)*4+1]+'</td>'+
+		'<td>'+sdata[(i+1)*4+2]+'</td>'+
+		'<td>'+((cv-sdata[(i+1)*4+3])*100/cv).toFixed(2)+'%</td>'+
+		'<td>'+cv+'</td>'+
 		'</tr>';
 	}
 
 	$("#combine").append(datastring);
 
+	var nodes = $('#portfolio > tbody > tr:last-child > td');
+	nodes.eq(0).html((totalCV*100/(totalCV+parseFloat(sdata[3]))).toFixed(2)+"%");
+	nodes.eq(1).html(weight.length);
+	nodes.eq(2).html(10000);
+	nodes.eq(3).html(totalCV.toFixed(2));
+	nodes.eq(4).html(sdata[3]);
+	nodes.eq(5).html(((totalCV+parseFloat(sdata[3])-10000)*100/10000).toFixed(2)+"%");
 
 	$("#combine tr").on("click", function(){
 		var index = parseInt($(this).find("td:first-child").html())-1;
@@ -135,7 +137,7 @@ $(document).ready(function(){
 
 		$.post("/strategy", {id:id[index].slice(2,8)}, function(data,status){
 			kDraw(stock[index][0], data.date, data.data);
-		})
+		});
 	});
 
 	function priceColor(p, lp, ele){

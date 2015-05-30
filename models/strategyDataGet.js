@@ -1,26 +1,63 @@
+var async = require('async');
 var mysql = require('./db');
 mysql.connect();
 
 function stockget(){}
 
 stockget.getId = function(database, table, callback){
-	mysql.query("select * from "+database+'.'+table+' where stockid != 000000', function(err,rows,fields){
+	// mysql.query("select * from "+database+'.'+table+' where stockid != 000000', function(err,rows,fields){
+	// 	if(err){
+	// 		console.log("no data");
+	// 		//mysql.end();
+	// 		return callback(null);
+	// 	}
+	// 	var data = [];
+	// 	for(var i=0; i<rows.length; i++){
+	// 		if(rows[i].stockid[0] == '6'){
+	// 			data.push('sh'+rows[i].stockid); 
+	// 		}else if(rows[i].stockid[0] == '0' || rows[i].stockid[0] == '3'){
+	// 			data.push('sz'+rows[i].stockid); 
+	// 		}
+	// 	}
+	// 	data = data.join(',');
+	// 	//mysql.end();
+	// 	return callback(data);
+	// });
+	mysql.query("select * from "+database+'.'+table+' order by stockid', function(err,rows,fields){
 		if(err){
 			console.log("no data");
 			//mysql.end();
 			return callback(null);
 		}
+		var id = [];
 		var data = [];
 		for(var i=0; i<rows.length; i++){
-			if(rows[i].stockid[0] == '6'){
-				data.push('sh'+rows[i].stockid); 
+			if(rows[i].stockid == '000000'){
+				
+			}else if(rows[i].stockid[0] == '6'){
+				id.push('sh'+rows[i].stockid); 
 			}else if(rows[i].stockid[0] == '0' || rows[i].stockid[0] == '3'){
-				data.push('sz'+rows[i].stockid); 
+				id.push('sz'+rows[i].stockid); 
 			}
+			data.push([rows[i].stockid,
+				rows[i].buydate.getFullYear().toString()+
+				(rows[i].buydate.getMonth()+1).toString()+
+				rows[i].buydate.getDate().toString(),
+				rows[i].buyprice,rows[i].amount
+			]);
 		}
-		data = data.join(',');
-		//mysql.end();
-		return callback(data);
+		id = id.join(',');
+
+		var w = [];
+		async.eachSeries(rows.slice(1), function(row,callback){
+			mysql.query("select weight from "+'updateDatabase.t'+row.stockid+' order by tradedate desc limit 1', function(err,subrows,fields){
+				w.push(subrows[0].weight);
+				callback();
+			});
+		}, function(err){
+			console.log(w);
+			return callback([data,id,w]);
+		});
 	});
 };
 
