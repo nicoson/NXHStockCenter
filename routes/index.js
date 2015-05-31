@@ -20,4 +20,10 @@ router.post("/strategy", function(req, res){
 	});
 });
 
+router.post("/portfolio", function(req, res){
+	stockget.getEarningTable("strategyDatabase", "s1_test_earningTable", function(data, err){
+		res.send(data);
+	});
+});
+
 module.exports = router;

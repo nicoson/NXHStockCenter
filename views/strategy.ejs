@@ -66,8 +66,9 @@
 
 
 			<!-- for ECharts -->
+			<div id="echartPortfolio" style="height:400px; width: 100%"></div>
 			<div id="echarts" style="height:400px; width: 100%"></div>
-
+			
 		</div>
 	</div>
 </div>
@@ -116,7 +117,33 @@ $(document).ready(function(){
 	nodes.eq(4).html(sdata[3]);
 	nodes.eq(5).html(((totalCV+parseFloat(sdata[3])-10000)*100/10000).toFixed(2)+"%");
 
-	$("#combine tr").on("click", function(){
+	nodesUp = $("#portfolio > tbody > tr:last-child");
+	nodesUp.on("click", function(){
+		$(this).addClass('table-1-chosen');
+		nodesDown.removeClass('table-1-chosen');
+		$("#echarts").hide();
+		$("#echartPortfolio").show();
+
+		$.post("/portfolio", {}, function(data,status){
+			var tdate = [];
+			var tdata = [];
+			for(var i=0; i<data.length; i++){
+				tdate.push(data[i].tradedate.slice(0,10));
+				tdata.push(data[i].amount);
+			}
+			AreaDraw(tdate,tdata);
+		});
+	});
+	//nodesUp.trigger("click");
+
+	nodesDown = $("#combine > tbody > tr:first-child~tr");
+	nodesDown.on("click", function(){
+		nodesDown.removeClass('table-1-chosen');
+		nodesUp.removeClass('table-1-chosen');
+		$(this).addClass('table-1-chosen');
+		$("#echartPortfolio").hide();
+		$("#echarts").show();
+
 		var index = parseInt($(this).find("td:first-child").html())-1;
 		$("#id").html(id[index]);
 		$("#name").html(stock[index][0]);
@@ -154,89 +181,6 @@ $(document).ready(function(){
 
 });
 
-</script>
-
-<!-- ECharts单文件引入 -->
-<!-- <script src="http://echarts.baidu.com/build/dist/echarts.js"></script> -->
-<script src="javascripts/echarts.js"></script>
-<script type="text/javascript">
-require.config({
-	paths: {
-		echarts: 'http://echarts.baidu.com/build/dist'
-	}
-});
-
-function kDraw(stockname, tdate, tdata){
-	require(
-		[
-		'echarts',
-		'echarts/chart/k' 
-		],
-		function (ec) {
-			var myChart = ec.init(document.getElementById('echarts')); 
-			var option = {
-			// title : {
-			// 	text: '2013年上半年上证指数'
-			// },
-			tooltip : {
-				trigger: 'axis',
-				formatter: function (params) {
-					var res = params[0].seriesName + ' ' + params[0].name;
-					res += '<br/>  开盘 : ' + params[0].value[0] + '  最高 : ' + params[0].value[3];
-					res += '<br/>  收盘 : ' + params[0].value[1] + '  最低 : ' + params[0].value[2];
-					return res;
-				},
-				backgroundColor: 'rgba(255,255,255,0.3)'
-			},
-			// legend: {
-			// 	data:['上证指数']
-			// },
-			toolbox: {
-				show : true,
-				feature : {
-					mark : {show: true},
-					dataZoom : {show: true},
-					dataView : {show: true, readOnly: false},
-					magicType: {show: true, type: ['line', 'bar']},
-					restore : {show: true},
-					saveAsImage : {show: true}
-				}
-			},
-			dataZoom : {
-				show : true,
-				realtime: true,
-				start : 20,
-				end : 100
-			},
-			xAxis : [
-			{
-				type : 'category',
-				boundaryGap : true,
-				axisTick: {onGap:false},
-				splitLine: {show:false},
-				axisLabel: {textStyle:{color: 'white'}},
-				data: tdate
-			}
-			],
-			yAxis : [
-			{
-				type : 'value',
-				scale:true,
-				axisLabel: {textStyle:{color: 'white'}},
-				boundaryGap: [0.01, 0.01]
-			}
-			],
-			series : [
-			{
-				name: stockname,
-				type:'k',
-				data: tdata	// 开盘，收盘，最低，最高
-			}]
-		};
-
-		myChart.setOption(option); 
-	});
-}
 </script>
 
 
