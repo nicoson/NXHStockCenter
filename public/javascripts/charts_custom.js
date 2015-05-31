@@ -86,9 +86,9 @@ function AreaDraw(tdate, tdata){
 		function (ec) {
 			var myChart = ec.init(document.getElementById('echartPortfolio')); 
 			option = {
-				title : {
-					text: 'Portfolio Earning Fields'
-				},
+				// title : {
+				// 	text: 'Portfolio Earning Fields'
+				// },
 				tooltip : {
 					trigger: 'axis'
 				},

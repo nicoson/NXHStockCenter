@@ -119,23 +119,10 @@ $(document).ready(function(){
 
 	nodesUp = $("#portfolio > tbody > tr:last-child");
 	nodesUp.on("click", function(){
-		$(this).addClass('table-1-chosen');
-		nodesDown.removeClass('table-1-chosen');
-		$("#echarts").hide();
-		$("#echartPortfolio").show();
-
-		$.post("/portfolio", {}, function(data,status){
-			var tdate = [];
-			var tdata = [];
-			for(var i=0; i<data.length; i++){
-				tdate.push(data[i].tradedate.slice(0,10));
-				tdata.push(data[i].amount);
-			}
-			AreaDraw(tdate,tdata);
-		});
+		figshow();
 	});
-	//nodesUp.trigger("click");
-
+	
+	
 	nodesDown = $("#combine > tbody > tr:first-child~tr");
 	nodesDown.on("click", function(){
 		nodesDown.removeClass('table-1-chosen');
@@ -178,6 +165,24 @@ $(document).ready(function(){
 		return;
 	}
 
+	function figshow(){
+		$(this).addClass('table-1-chosen');
+		nodesDown.removeClass('table-1-chosen');
+		$("#echarts").hide();
+		$("#echartPortfolio").show();
+
+		$.post("/portfolio", {}, function(data,status){
+			var tdate = [];
+			var tdata = [];
+			for(var i=0; i<data.length; i++){
+				tdate.push(data[i].tradedate.slice(0,10));
+				tdata.push(data[i].amount);
+			}
+			AreaDraw(tdate,tdata);
+		});
+	}
+
+	figshow();
 
 });
 
