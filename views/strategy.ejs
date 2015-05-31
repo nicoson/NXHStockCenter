@@ -102,7 +102,7 @@ $(document).ready(function(){
 		'<td>'+stock[i][0]+'</td>'+
 		'<td>'+sdata[(i+1)*4+1]+'</td>'+
 		'<td>'+sdata[(i+1)*4+2]+'</td>'+
-		'<td>'+((cv-sdata[(i+1)*4+3])*100/cv).toFixed(2)+'%</td>'+
+		'<td>'+((stock[i][3]*weight[i]-sdata[(i+1)*4+2])*100/sdata[(i+1)*4+3]).toFixed(2)+'%</td>'+
 		'<td>'+cv+'</td>'+
 		'</tr>';
 	}
