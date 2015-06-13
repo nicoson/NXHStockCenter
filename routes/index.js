@@ -4,7 +4,7 @@ var stockget = require('../models/strategyDataGet');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	res.render('index', { title: 'Express' });
+	res.render('index', { title: 'NXH Stock Strategy Center' });
 });
 
 router.get('/strategy', function(req, res, next) {

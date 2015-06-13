@@ -8,7 +8,7 @@
 			<table id="portfolio" class="table-1">
 				<tr>
 					<th>Equity Ratio</th>
-					<th>Number</th>
+					<th>Quantity</th>
 					<th>Original Capital</th>
 					<th>Current MV</th>
 					<th>Current Cash</th>
@@ -158,7 +158,7 @@ $(document).ready(function(){
 		if(p>lp){
 			ele.css("color", "red");
 		}else if(p<lp){
-			ele.css("color", "green");
+			ele.css("color", "#00ff00");
 		}else{
 			ele.css("color", "grey");
 		}
@@ -170,6 +170,17 @@ $(document).ready(function(){
 		nodesDown.removeClass('table-1-chosen');
 		$("#echarts").hide();
 		$("#echartPortfolio").show();
+
+		$("#id").html('&nbsp;');
+		$("#name").html('portfolio');
+		$("#open").html();
+		$("#high").html();
+		$("#low").html();
+		$("#price").html(totalCV.toFixed(2));
+		$("#volume").html();
+		$("#amount").html();
+		$("#date").html(stock[0][30]+'&nbsp;&nbsp;'+stock[0][31]);
+		$("#rate").html(((totalCV+parseFloat(sdata[3])-10000)*100/10000).toFixed(2)+"%");
 
 		$.post("/portfolio", {}, function(data,status){
 			var tdate = [];

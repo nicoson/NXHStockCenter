@@ -37,7 +37,6 @@ stockget.getId = function(database, table, callback){
 				callback();
 			});
 		}, function(err){
-			console.log(w);
 			return callback([data,id,w]);
 		});
 	});
