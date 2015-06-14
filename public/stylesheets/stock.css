@@ -1,0 +1,15 @@
+.page_stock p {
+	font-size: 20px;
+	padding-top: 100px;
+}
+
+.page_stock input {
+	height: 30px;
+	font-size: 15px;
+	color: black;
+	padding: 3px 5px;
+}
+
+.page_stock button {
+	width: 100px;
+}

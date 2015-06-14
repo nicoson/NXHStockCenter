@@ -53,6 +53,7 @@ stockget.getData = function(id, database, callback){
 		for(var i=0; i<rows.length; i++){
 			tdate.push(rows[i].tradedate.getFullYear()+'/'+(rows[i].tradedate.getMonth()+1)+'/'+rows[i].tradedate.getDate());
 			sdata.push([(rows[i].open/rows[i].weight).toFixed(2),(rows[i].close/rows[i].weight).toFixed(2),(rows[i].low/rows[i].weight).toFixed(2),(rows[i].high/rows[i].weight).toFixed(2)]);
+			//sdata.push([rows[i].open.toFixed(2),rows[i].close.toFixed(2),rows[i].low.toFixed(2),rows[i].high.toFixed(2)]);
 		}
 		return callback({date: tdate, data: sdata});
 	});

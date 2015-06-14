@@ -1,0 +1,35 @@
+<% include header %>
+
+<link rel="stylesheet" href="/stylesheets/stock.css">
+
+<div class="container page_stock">
+	<div class="row">
+		<div class="col-sm-3">
+			<div>
+				<p>stock code:</p>
+				<input id="stock_code" type="text" value="000001"/>
+			</div>
+			<br />
+			<button id="stock_submit" class="btn btn-primary">Go</button>
+		</div>
+		<div class="col-sm-9">
+			<div id="echarts" style="height:400px; width: 100%"></div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+$(function(){
+	$('#stock_submit').on('click', function(){
+		code = $('#stock_code').val();
+		$.post("/strategy", {id: code}, function(data,status){
+			kDraw(code, data.date, data.data);
+		});	
+	});
+});
+
+</script>
+
+
+<% include footer %>

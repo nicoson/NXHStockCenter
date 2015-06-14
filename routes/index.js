@@ -26,4 +26,8 @@ router.post("/portfolio", function(req, res){
 	});
 });
 
+router.get('/stock', function(req, res, next) {
+	res.render('stock');
+});
+
 module.exports = router;
